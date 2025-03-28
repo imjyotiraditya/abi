@@ -1,37 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>ABI Detector</title>
-        <link rel="stylesheet" href="styles.css">        
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABI</title>
+    <style>
+        body {
+            font-family: monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-size: 20px;
+        }
     </style>
-    </head>
-    <body>
-        <header class="site-header">
-            <div class="header-content">
-                <div class="logo">
-                    <h1>ABI Detector</h1>
-                    <p class="tagline">Check your device ABI information</p>
-                </div>
-            </div>
-        </header>
-
-        <div class="container">
-            <div class="result">
-                <h3 class="result-title">Raw Platform</h3>
-                <div class="result-value" id="platform"></div>
-            </div>
-            <div class="result">
-                <h3 class="result-title">Android ABI</h3>
-                <div class="result-value" id="abi"></div>
-            </div>
-        </div>
-
-        <footer class="footer">
-            Made by <a href="https://github.com/imjyotiraditya" target="_blank"
-                rel="noopener noreferrer">Jyotiraditya Panda</a>
-        </footer>
-        <script src="script.js"></script>
-    </body>
+</head>
+<body>
+    <script>
+        function detectABI(platform) {
+            const p = platform.toLowerCase();
+            
+            if (p.includes('arm') || p.includes('aarch')) {
+                if (p.includes('v8') || p.includes('64') || p.includes('aarch64')) return 'arm64-v8a';
+                if (p.includes('v7')) return 'armeabi-v7a';
+                if (p.includes('v6')) return 'armeabi-v6';
+                return 'armeabi';
+            }
+            
+            if (p.includes('x86') || p.includes('amd') || /i[3-6]86/.test(p)) {
+                if (p.includes('64') || p.includes('x64')) return 'x86_64';
+                return 'x86';
+            }
+            
+            return 'Unknown';
+        }
+        
+        document.write(detectABI(navigator.platform));
+    </script>
+</body>
 </html>
